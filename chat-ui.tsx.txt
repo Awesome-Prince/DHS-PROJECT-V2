@@ -1,0 +1,103 @@
+import { useState, useEffect, useRef } from 'react'
+import { Avatar } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
+import { Home, Info, Phone, Send, Menu, X, Code, Zap, Sparkles, Copy, Flag, RotateCcw } from 'lucide-react'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import axios from 'axios'
+import Head from 'next/head'
+
+const school_data = "None" // This will be added later
+
+export default function Component() {
+  // ... (keep all the existing state and functions)
+
+  useEffect(() => {
+    // Add favicon
+    const link = document.createElement('link')
+    link.rel = 'icon'
+    link.href = 'https://raw.githubusercontent.com/Awesome-Prince/dhs-logo.png/refs/heads/main/Picsart_24-10-14_13-29-40-569.png'
+    document.head.appendChild(link)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-100 via-white to-blue-100">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col h-screen bg-gradient-to-br from-blue-100 via-white to-blue-100 text-blue-900">
+      <Head>
+        <title>AI Chat - DHARAM HINDUJA SCHOOL</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Awesome-Prince/dhs-logo.png/refs/heads/main/Picsart_24-10-14_13-29-40-569.png" />
+      </Head>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+      
+      {/* Header */}
+      <header className="flex items-center justify-between p-4 bg-blue-200 bg-opacity-50 backdrop-blur-sm">
+        <div className="flex items-center">
+          <Button variant="ghost" onClick={() => setIsNavOpen(true)} className="mr-2 text-blue-900">
+            <Menu className="h-6 w-6" />
+          </Button>
+          <div className="flex items-center space-x-2">
+            <img src="https://raw.githubusercontent.com/Awesome-Prince/dhs-logo.png/refs/heads/main/Picsart_24-10-14_13-29-40-569.png" alt="Website Logo" className="w-8 h-8" />
+            <span className="text-xl font-semibold text-blue-900">AI Chat</span>
+          </div>
+        </div>
+      </header>
+
+      {/* Navbar Overlay */}
+      {isNavOpen && (
+        <div className="fixed inset-0 bg-blue-100 bg-opacity-50 backdrop-blur-sm z-50" onClick={() => setIsNavOpen(false)}>
+          <nav className="w-64 h-full bg-gradient-to-b from-blue-200 to-white p-4 flex flex-col" onClick={(e) => e.stopPropagation()}>
+            {/* ... (keep existing nav content, update styling) */}
+          </nav>
+        </div>
+      )}
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {renderContent()}
+
+        {/* Input Area */}
+        {activeSection === 'home' && (
+          <div className="p-4 bg-blue-200 bg-opacity-50 backdrop-blur-sm">
+            <form onSubmit={handleSend} className="flex space-x-2">
+              <Input 
+                className="flex-1 bg-white border-blue-300 focus:border-blue-500 text-blue-900 placeholder-blue-400 text-sm md:text-base rounded-full px-4 py-2"
+                placeholder="Type your message here..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+              />
+              <Button type="submit" className="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-full px-4 py-2 transition-all duration-200">
+                <Send className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Send</span>
+              </Button>
+            </form>
+          </div>
+        )}
+
+        {/* Footer */}
+        <footer className="p-4 bg-blue-200 bg-opacity-50 backdrop-blur-sm text-blue-800 text-xs md:text-sm">
+          <p className="font-semibold">DHARAM HINDUJA MATRICULATION HIGHER SECONDARY SCHOOL</p>
+          <p>No.19, Poonthottam Street, Tiruvottiyur, Chennai - 600 019, Tamilnadu</p>
+          <p>P: (044) 2572-7553, +91 9025218724</p>
+          <p>E: dharam_hinduja@yahoo.com</p>
+        </footer>
+      </div>
+
+      {/* Report Dialog */}
+      <Dialog open={isReportDialogOpen} onOpenChange={setIsReportDialogOpen}>
+        <DialogContent className="bg-white text-blue-900">
+          {/* ... (keep existing dialog content) */}
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
